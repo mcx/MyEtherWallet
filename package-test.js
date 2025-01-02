@@ -1,4 +1,4 @@
-// package-test.js: check to make sure that all dependcies are sufficiently up
+// package-test.js: check to make sure that all dependencies are sufficiently up
 // to date. If dependencies are too outdated, exit with an error, failing `npm
 // run update:packages` and thus eventually the entire build.
 
@@ -49,9 +49,6 @@ const EXCEPTIONS = [
   'vue',
   '@vue/cli-plugin-e2e-nightwatch',
   '@kleros/address-tags-sdk',
-  // breaking
-  '@shapeshiftoss/hdwallet-core',
-  '@shapeshiftoss/hdwallet-keepkey-webusb',
   'package-json',
   'codecov',
   'node-polyfill-webpack-plugin',
@@ -77,12 +74,35 @@ const EXCEPTIONS = [
   'is-ipfs',
   'axios',
   'prettier', // creates more warnings
-  '@ledgerhq/hw-app-eth', // issue with imports
   '@ledgerhq/live-common', // issue with imports
   'bip39', // breaks
-  'ethers',
-  'patch-package',
-  'highcharts'
+  'ethers', // major update
+  'patch-package', // major update
+  'highcharts', // major update
+  'highcharts-vue', // major update for vue 3
+  'geckodriver',
+  'eslint-plugin-prettier', // breaks
+  'ethereum-block-by-date',
+  '@mathieustan/vue-intercom', // major version
+  'vue-chartjs',
+  'chart.js',
+  'vue-tippy',
+  'less-loader', // doesn't support webpack 4
+  'eslint-plugin-security', // part of major release for eslint
+  '@commitlint/config-conventional',
+  'commitlint',
+  'minizlib',
+  'remark-preset-lint-recommended', // breaks
+  '@sentry/browser', // major update
+  '@sentry/vue', // major update
+  'qrcode-with-logos', // fix after release
+  '@ensdomains/ens-contracts',
+  '@shapeshiftoss/hdwallet-core',
+  '@shapeshiftoss/hdwallet-keepkey-webusb',
+  '@trezor/connect-web',
+  '@walletconnect/modal',
+  '@walletconnect/ethereum-provider',
+  'viem'
 ];
 const CUSTOM_DIST = {
   ['babel-core']: 'bridge'
@@ -131,23 +151,18 @@ const looper = () => {
         const isBehind =
           new Date(latestVersionTime).getTime() <
           new Date().getTime() - SAFE_TIME;
-        const isMewComponentBeta =
-          _name === '@myetherwallet/mew-components' &&
-          latestVersion.includes('-beta');
         if (isBehind) {
-          if (!isMewComponentBeta) {
-            console.error(
-              'ERROR: Update ' +
-                _name +
-                ' from ' +
-                ALL_PACKAGES[_name] +
-                ' to ' +
-                latestVersion +
-                '. Released:',
-              latestVersionTime
-            );
-            updatesFound = true;
-          }
+          console.error(
+            'ERROR: Update ' +
+              _name +
+              ' from ' +
+              ALL_PACKAGES[_name] +
+              ' to ' +
+              latestVersion +
+              '. Released:',
+            latestVersionTime
+          );
+          updatesFound = true;
         }
       }
     })

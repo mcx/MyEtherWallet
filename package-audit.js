@@ -21,11 +21,38 @@ const AUDIT_EXCEPTIONS = [
   'json5',
   'http-cache-semantics',
   'cacheable-request',
-  // look into updating after release
   'dns-packet',
   'decode-uri-component',
   '@openzeppelin/contracts',
-  'engine.io'
+  'engine.io',
+  'socket.io-parser',
+  'fast-xml-parser',
+  '@grpc/grpc-js',
+  'is_js',
+  'get-func-name',
+  'chart.js',
+  'browserify-sign',
+  'lodash.pick',
+  'ip',
+  'webpack-dev-middleware',
+  'web3-utils',
+  '@solana/web3.js',
+  'lodash.template',
+  'html-minifier',
+  'braces',
+  'ws',
+  // issues after new enkrypt ens lib
+  'lodash',
+  'node-forge',
+  'elliptic',
+  'protobufjs',
+  'minimatch',
+  'socket.io',
+  'semver',
+  'path-to-regexp',
+  'body-parser',
+  'secp256k1',
+  'http-proxy-middleware'
 ];
 const execute = (command, callback) => {
   exec(

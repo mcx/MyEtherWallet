@@ -168,7 +168,7 @@
                 ></a
               >
               <a
-                v-if="pending.ethVmUrl && !onGoerli"
+                v-if="pending.ethVmUrl"
                 rel="noopener noreferrer"
                 class="font-weight-medium ml-5"
                 :href="pending.ethVmUrl"
@@ -313,7 +313,8 @@
               </div>
               <div class="font-weight-medium mt-1">
                 {{
-                  active.status.toLowerCase() === 'active'
+                  active.status.toLowerCase() === STATUS_TYPES.ACTIVE ||
+                  active.status.toLowerCase() === STATUS_TYPES.EXITING
                     ? 'Exited, in queue for withdrawal'
                     : 'Exited and withdrawn'
                 }}
@@ -382,7 +383,6 @@ import {
   formatPercentageValue
 } from '@/core/helpers/numberFormatHelper';
 import { STATUS_TYPES } from '@/dapps/staked-dapp/handlers/handlerStaked';
-import { GOERLI } from '@/utils/networks/types';
 
 import iconETHNavy from '@/assets/images/currencies/eth-dark-navy.svg';
 
@@ -503,7 +503,8 @@ export default {
       return this.validatorsRaw.reduce((acc, raw) => {
         if (
           raw.status.toLowerCase() === STATUS_TYPES.ACTIVE ||
-          raw.status.toLowerCase() === STATUS_TYPES.EXITED
+          raw.status.toLowerCase() === STATUS_TYPES.EXITED ||
+          raw.status.toLowerCase() === STATUS_TYPES.EXITING
         ) {
           const totalBalanceETH = this.convertToEth1(
             raw.detailed_balance_info.balance,
@@ -514,7 +515,11 @@ export default {
             raw.validator_index,
             true
           );
-          if (!withdrawn || raw.status.toLowerCase() === STATUS_TYPES.EXITED) {
+          if (
+            !withdrawn ||
+            raw.status.toLowerCase() === STATUS_TYPES.EXITED ||
+            raw.status.toLowerCase() === STATUS_TYPES.EXITING
+          ) {
             acc.push(
               Object.assign({}, raw, {
                 url: `${
@@ -715,13 +720,6 @@ export default {
      */
     isExpanded(idx) {
       return this.expanded === idx;
-    },
-    /**
-     * @returns boolean
-     * Checks if its goerli
-     */
-    onGoerli() {
-      return this.network.type.name === GOERLI.name;
     },
     /**
      * @returns string

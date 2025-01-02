@@ -10,34 +10,25 @@ const exportObj = {
   pwa: {
     name: 'MyEtherWallet',
     workboxOptions: {
+      cacheId: `myetherwallet-${JSON.parse(config.env_vars.VERSION)}`,
       importWorkboxFrom: 'local',
       skipWaiting: true,
       clientsClaim: true,
-      navigateFallback: '/index.html',
-      navigateFallbackBlacklist: [/^\/pages/]
+      cleanupOutdatedCaches: true,
+      exclude: [/index\.html$/, /\.map$/, /staking/],
+      navigateFallbackBlacklist: [/staking/]
+    },
+    iconPaths: {
+      faviconSVG: 'icons/favicon.svg',
+      favicon32: 'icons/favicon-32x32.png',
+      favicon16: 'icons/favicon-16x16.png',
+      appleTouchIcon: 'icons/apple-touch-icon-152x152.png',
+      maskIcon: 'icons/safari-pinned-tab.svg',
+      msTileImage: 'icons/msapplication-icon-144x144.png'
     }
   },
-  chainWebpack: config => {
-    // GraphQL Loader
-    config.module
-      .rule('graphql')
-      .test(/\.graphql$/)
-      .use('graphql-tag/loader')
-      .loader('graphql-tag/loader')
-      .end();
-    config.module
-      .rule('transpile-eth2-keystore')
-      .test(/node_modules\/@myetherwallet\/eth2-keystore\/.*\.js$/)
-      .use('babel')
-      .loader('babel-loader')
-      .end();
-    config.module
-      .rule('transpile-chainsafe')
-      .test(/node_modules\/@chainsafe\/.*\.js$/)
-      .use('babel')
-      .loader('babel-loader')
-      .end();
-  }
+  chainWebpack: config.transpilers,
+  transpileDependencies: config.transpileDependencies
 };
 
 module.exports = exportObj;
